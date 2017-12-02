@@ -46,6 +46,10 @@ for (var i = 0; i < puzzle.children.length; i++) {
 
 window.addEventListener('mouseup', function() {
 	puzzle.removeEventListener('mousemove', changeElementPosition);
-	item.style.cursor = 'grab';
 	puzzle.classList.remove("grabbing");
+});
+
+fix.addEventListener('click', function() {
+	puzzle.classList.add("fixed");
+	this.style.display = 'none';
 });
