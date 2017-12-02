@@ -1,30 +1,39 @@
 function setRandomPosition(elementID) {
-	var left = Math.floor(Math.random() * (400)) + 10;
-	var top = Math.floor(Math.random() * (250)) + 10;
+	var left = Math.floor(Math.random() * (410)) + 1;
+	var top = Math.floor(Math.random() * (260)) + 1;
 
 	elementID.style.left = left + 'px';
 	elementID.style.top = top + 'px';
 }
-
-function changeElementPosition(event) {
-	console.log(event.offsetX);
-	item.style.left = initX + event.clientX - mousePressX + 'px';
-	item.style.top = initY + event.clientY - mousePressY + 'px';
-	puzzle.style.cursor = "grabbing";
-}
-
 setRandomPosition(item1);
 setRandomPosition(item2);
 setRandomPosition(item3);
 setRandomPosition(item4);
 setRandomPosition(item5);
 
-console.log(puzzle.children[0])
+function changeElementPosition(event) {
+	var newLeft = initX + event.clientX - mousePressX;
+	var newTop = initY + event.clientY - mousePressY;
+
+	if (newLeft > 600 - item.clientWidth) newLeft = 600 - item.clientWidth;
+	if (newLeft < 1) newLeft = 0;
+	if (newTop > 400 - item.clientHeight) newTop = 400 - item.clientHeight;
+	if (newTop < 1) newTop = 0;
+
+	item.style.left = newLeft + 'px';
+	item.style.top = newTop + 'px';
+}
+
+var item;
+var initX, initY;
+var mousePressX, mousePressY;
+
+
 
 for (var i = 0; i < puzzle.children.length; i++) {
 	puzzle.children[i].addEventListener('mousedown', function(e) {
-		item = e.target;
-		console.log(item);
+		item = this;
+		puzzle.classList.add("grabbing");
 
 		initX = Number(this.style.left.replace('px', ''));
 		initY = Number(this.style.top.replace('px', ''));
@@ -37,5 +46,6 @@ for (var i = 0; i < puzzle.children.length; i++) {
 
 window.addEventListener('mouseup', function() {
 	puzzle.removeEventListener('mousemove', changeElementPosition);
-	puzzle.style.cursor = "grab";
+	item.style.cursor = 'grab';
+	puzzle.classList.remove("grabbing");
 });
